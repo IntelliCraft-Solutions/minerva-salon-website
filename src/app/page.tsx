@@ -39,9 +39,20 @@ export default function Home() {
       <Navigation />
 
       {/* Hero Section */}
-      <section className="relative min-h-screen bg-[#6B5344] overflow-hidden">
+      <section
+        className="relative min-h-screen overflow-hidden bg-[#6B5344]"
+        style={{
+          backgroundImage: "url(/herobg2.jpg)",
+          backgroundSize: "auto 108vh",
+          backgroundRepeat: "no-repeat",
+          backgroundPosition: "right bottom",
+          backgroundColor: "#6B5344"
+        }}
+      >
+        {/* Left gradient overlay to enhance text contrast */}
+        <div className="pointer-events-none absolute inset-y-0 left-0 w-2/3 bg-gradient-to-r from-[#6B5344] via-[#6B5344]/80 to-transparent" />
         <div className="container mx-auto px-4 lg:px-8 pt-24 lg:pt-32 pb-16">
-          <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+          <div className="grid grid-cols-1 gap-8 lg:gap-12 items-center">
             {/* Left Content */}
             <motion.div
               initial={{ opacity: 0, x: -50 }}
@@ -98,49 +109,6 @@ export default function Home() {
                   </div>
                   <div className="text-primary text-2xl font-bold mb-1">50% OFF</div>
                   <div className="text-xs text-[#2A1810] font-medium">for first time</div>
-                </div>
-              </motion.div>
-            </motion.div>
-
-            {/* Right - Hero Image */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="relative"
-            >
-              <div className="relative aspect-[3/4] lg:aspect-[2/3] rounded-3xl overflow-hidden">
-                <Image
-                  src="https://images.unsplash.com/photo-1560869713-7d0a29430803?w=800&q=80"
-                  alt="Hair Model"
-                  fill
-                  priority
-                  className="object-cover"
-                />
-              </div>
-              
-              {/* Team Avatars */}
-              <motion.div
-                initial={{ opacity: 0, x: 30 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.8, delay: 0.5 }}
-                className="absolute bottom-8 right-8 bg-white rounded-full p-3 shadow-xl flex items-center gap-2"
-              >
-                <div className="flex -space-x-2">
-                  {[1, 2, 3, 4].map((i) => (
-                    <div key={i} className="w-10 h-10 rounded-full border-2 border-white overflow-hidden bg-[#E8DDD0]">
-                      <Image
-                        src={`https://i.pravatar.cc/100?img=${i}`}
-                        alt={`Team ${i}`}
-                        width={40}
-                        height={40}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                  ))}
-                </div>
-                <div className="w-10 h-10 rounded-full bg-[#2A1810] flex items-center justify-center">
-                  <span className="text-white text-xs font-bold">+</span>
                 </div>
               </motion.div>
             </motion.div>

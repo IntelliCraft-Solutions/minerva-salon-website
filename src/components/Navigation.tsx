@@ -4,25 +4,32 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Menu } from "lucide-react"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
+import { useEffect, useState } from "react"
 
 export default function Navigation() {
+  const [scrolled, setScrolled] = useState(false)
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8)
+    onScroll()
+    window.addEventListener("scroll", onScroll, { passive: true })
+    return () => window.removeEventListener("scroll", onScroll)
+  }, [])
+
   const navLinks = [
     { name: "Home", href: "/" },
     { name: "About Us", href: "/about" },
-    { name: "Our Salon", href: "#services" },
-    { name: "Blog", href: "#blog" },
+    { name: "Services", href: "/services" },
+    { name: "Booking", href: "#booking" },
   ]
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-[#6B5344]/95 backdrop-blur-sm">
+    <nav className={`fixed top-0 left-0 right-0 z-50 transition-colors ${
+      scrolled ? "bg-[#6B5344]/95 backdrop-blur-sm border-b border-white/20" : "bg-transparent border-b border-transparent"
+    }`}>
       <div className="container mx-auto px-4 lg:px-8">
-        <div className="flex items-center justify-between h-16 lg:h-20">
-          {/* Logo */}
-          <Link href="/" className="text-xl lg:text-2xl font-bold tracking-wider text-white">
-            MINERVA
-          </Link>
-
-          {/* Desktop Navigation */}
+        <div className="relative flex items-center justify-between h-16 lg:h-20">
+          {/* Left: Desktop Navigation */}
           <div className="hidden lg:flex items-center gap-8">
             {navLinks.map((link) => (
               <Link
@@ -35,7 +42,12 @@ export default function Navigation() {
             ))}
           </div>
 
-          {/* CTA Button */}
+          {/* Center: Brand */}
+          <Link href="/" className="absolute left-1/2 -translate-x-1/2 text-2xl lg:text-3xl brand-wordmark text-white tracking-[0.25em]">
+            MINERVA
+          </Link>
+
+          {/* Right: CTA + Mobile Menu */}
           <div className="flex items-center gap-4">
             <Button 
               variant="outline" 
