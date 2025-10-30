@@ -6,6 +6,14 @@ interface EmailOptions {
   html: string
 }
 
+interface ContactEmailData {
+  name: string
+  email: string
+  phone: string
+  category: string
+  message: string
+}
+
 interface AppointmentEmailData {
   appointmentId: string
   service: string
@@ -17,6 +25,143 @@ interface AppointmentEmailData {
   phone: string
   email: string
   notes?: string
+}
+
+const getContactCategoryLabel = (category: string) => {
+  switch (category) {
+    case 'services':
+      return 'Need Salon Services'
+    case 'careers':
+      return 'Want to Join the Team'
+    case 'partnership':
+      return 'Collaboration / Partnership'
+    case 'feedback':
+      return 'Feedback or Concern'
+    default:
+      return 'General Inquiry'
+  }
+}
+
+const getSalonContactEmail = (data: ContactEmailData) => {
+  const categoryLabel = getContactCategoryLabel(data.category)
+  return `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>New Contact Request</title>
+    </head>
+    <body style="margin:0;padding:0;background-color:#f5f5f5;font-family:-apple-system,BlinkMacSystemFont,\"Segoe UI\",Roboto,\"Helvetica Neue\",Arial,sans-serif;">
+      <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f5f5f5;padding:40px 20px;">
+        <tr>
+          <td align="center">
+            <table width="620" cellpadding="0" cellspacing="0" style="background-color:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,0.08);">
+              <tr>
+                <td style="background-color:#6B5344;padding:32px;text-align:center;color:#ffffff;">
+                  <h1 style="margin:0;font-size:26px;font-weight:700;letter-spacing:1px;">New Contact Request</h1>
+                  <p style="margin:8px 0 0 0;font-size:14px;opacity:0.85;">A new enquiry just arrived from the website</p>
+                </td>
+              </tr>
+              <tr>
+                <td style="padding:36px;">
+                  <h2 style="margin:0 0 16px 0;font-size:20px;color:#2A1810;">Details</h2>
+                  <table width="100%" cellpadding="12" cellspacing="0" style="background-color:#F5EFE7;border-radius:10px;margin-bottom:24px;">
+                    <tr>
+                      <td style="width:30%;color:#6B5344;font-size:14px;font-weight:600;">Name</td>
+                      <td style="color:#2A1810;font-size:14px;">${data.name}</td>
+                    </tr>
+                    <tr>
+                      <td style="color:#6B5344;font-size:14px;font-weight:600;">Email</td>
+                      <td style="color:#A94442;font-size:14px;"><a href="mailto:${data.email}" style="color:#A94442;text-decoration:none;">${data.email}</a></td>
+                    </tr>
+                    <tr>
+                      <td style="color:#6B5344;font-size:14px;font-weight:600;">Phone</td>
+                      <td style="color:#2A1810;font-size:14px;"><a href="tel:${data.phone}" style="color:#2A1810;text-decoration:none;">${data.phone}</a></td>
+                    </tr>
+                    <tr>
+                      <td style="color:#6B5344;font-size:14px;font-weight:600;">Category</td>
+                      <td style="color:#2A1810;font-size:14px;">${categoryLabel}</td>
+                    </tr>
+                  </table>
+                  <div style="background-color:#FFF9F5;border-left:4px solid #A94442;padding:18px 22px;border-radius:8px;">
+                    <h3 style="margin:0 0 10px 0;font-size:16px;color:#2A1810;">Message</h3>
+                    <p style="margin:0;color:#4A3C35;font-size:15px;line-height:1.6;white-space:pre-line;">${data.message}</p>
+                  </div>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+    </body>
+    </html>
+  `
+}
+
+const getCustomerContactConfirmation = (data: ContactEmailData) => {
+  const salonPhone = process.env.SALON_PHONE || '+1-555-555-5555'
+  const categoryLabel = getContactCategoryLabel(data.category)
+  return `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>We received your message</title>
+    </head>
+    <body style="margin:0;padding:0;background-color:#f5f5f5;font-family:-apple-system,BlinkMacSystemFont,\"Segoe UI\",Roboto,\"Helvetica Neue\",Arial,sans-serif;">
+      <table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f5f5f5;padding:40px 20px;">
+        <tr>
+          <td align="center">
+            <table width="600" cellpadding="0" cellspacing="0" style="background-color:#ffffff;border-radius:12px;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,0.08);">
+              <tr>
+                <td style="background-color:#6B5344;padding:36px;text-align:center;color:#ffffff;">
+                  <h1 style="margin:0;font-size:30px;font-weight:700;letter-spacing:2px;">MINERVA</h1>
+                  <p style="margin:10px 0 0 0;font-size:15px;opacity:0.85;">Premium Salon & Beauty</p>
+                </td>
+              </tr>
+              <tr>
+                <td style="padding:40px 36px;">
+                  <h2 style="margin:0 0 16px 0;font-size:24px;color:#2A1810;">Hi ${data.name.split(' ')[0] || 'there'},</h2>
+                  <p style="margin:0 0 20px 0;font-size:16px;line-height:1.6;color:#4A3C35;">Thank you for reaching out regarding <strong>${categoryLabel}</strong>. Our concierge team will review your message and respond within 24 hours.</p>
+                  <div style="background-color:#F5EFE7;border-radius:10px;padding:22px 24px;margin-bottom:24px;">
+                    <h3 style="margin:0 0 12px 0;font-size:16px;color:#2A1810;">Your Message</h3>
+                    <p style="margin:0;color:#4A3C35;font-size:15px;line-height:1.6;white-space:pre-line;">${data.message}</p>
+                  </div>
+                  <p style="margin:0 0 20px 0;font-size:15px;color:#4A3C35;">If you need immediate assistance, please call us at <a href="tel:${salonPhone}" style="color:#A94442;text-decoration:none;">${salonPhone}</a> or reply to this email.</p>
+                  <p style="margin:0;font-size:15px;font-weight:600;color:#2A1810;">The MINERVA Team</p>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+    </body>
+    </html>
+  `
+}
+
+export async function sendContactEmails(data: ContactEmailData) {
+  const salonEmail = process.env.SALON_EMAIL || process.env.SMTP_USER
+
+  if (!salonEmail) {
+    throw new Error('Salon email is not configured')
+  }
+
+  await sendEmail({
+    to: salonEmail,
+    subject: `New Contact Request — ${data.name}`,
+    html: getSalonContactEmail(data),
+  })
+
+  await sendEmail({
+    to: data.email,
+    subject: 'We received your message — MINERVA Salon',
+    html: getCustomerContactConfirmation(data),
+  })
+
+  return { success: true }
 }
 
 // Create transporter with Gmail SMTP

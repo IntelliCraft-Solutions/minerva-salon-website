@@ -50,12 +50,14 @@ export default function Navigation() {
 
           {/* Right: CTA + Mobile Menu */}
           <div className="flex items-center gap-4">
-            <Button 
-              variant="outline" 
-              className="hidden lg:flex bg-white text-[#6B5344] hover:bg-white/90 border-white rounded-full px-6"
-            >
-              Contact Us
-            </Button>
+            <Link href="/contact">
+              <Button 
+                variant="outline" 
+                className="hidden lg:flex bg-white text-[#6B5344] hover:bg-white/90 border-white rounded-full px-6"
+              >
+                Contact Us
+              </Button>
+            </Link>
 
             {/* Mobile Menu */}
             <Sheet>
@@ -75,12 +77,14 @@ export default function Navigation() {
                       {link.name}
                     </Link>
                   ))}
-                  <Button 
-                    variant="outline" 
-                    className="bg-white text-[#6B5344] hover:bg-white/90 border-white rounded-full mt-4 h-12 text-base font-semibold w-full"
-                  >
-                    Contact Us
-                  </Button>
+                  <Link href="/contact">
+                    <Button 
+                      variant="outline" 
+                      className="bg-white text-[#6B5344] hover:bg-white/90 border-white rounded-full mt-4 h-12 text-base font-semibold w-full"
+                    >
+                      Contact Us
+                    </Button>
+                  </Link>
                 </div>
               </SheetContent>
             </Sheet>

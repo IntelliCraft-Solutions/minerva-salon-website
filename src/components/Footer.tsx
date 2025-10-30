@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { MapPin, Phone, Mail, Facebook, Twitter, Instagram, Youtube } from "lucide-react"
+import { MapPin, Phone, Mail, Facebook, Twitter, Instagram, Youtube, MessageCircle, ExternalLink } from "lucide-react"
 import { useState } from "react"
 
 export default function Footer() {
@@ -97,14 +97,41 @@ export default function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-          <div className="text-2xl font-bold tracking-wider">MINERVA</div>
+        <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-6">
+          <div className="flex flex-col items-center md:items-start gap-3 text-center md:text-left">
+            <div className="text-2xl font-bold tracking-wider">MINERVA</div>
+            <div className="text-sm text-white/70 flex flex-col items-center md:items-start gap-2">
+              <span className="flex items-center gap-2">
+                Developed with <span aria-hidden="true">❤️</span> by
+                <Link
+                  href="https://intellicraftsolutions.vercel.app/"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-1 font-semibold text-white hover:text-primary transition-colors"
+                >
+                  IntelliCraft Solutions
+                  <ExternalLink className="h-3.5 w-3.5" />
+                </Link>
+              </span>
+              <span className="flex items-center gap-2">
+                <span className="text-white/50"></span>
+                <Link
+                  href="mailto:intellicraft.solutions25@gmail.com"
+                  className="inline-flex items-center gap-2 hover:text-primary transition-colors"
+                >
+                  <Mail className="h-4 w-4" />
+                  intellicraft.solutions25@gmail.com
+                </Link>
+              </span>
+            </div>
+          </div>
           <div className="flex flex-wrap justify-center gap-6 text-sm text-white/70">
+            <Link href="/contact" className="hover:text-white transition-colors">Contact</Link>
             <Link href="#" className="hover:text-white transition-colors">Sitemap</Link>
             <Link href="#" className="hover:text-white transition-colors">Privacy Policy</Link>
             <Link href="#" className="hover:text-white transition-colors">Terms of Service</Link>
           </div>
-          <p className="text-sm text-white/70">
+          <p className="text-sm text-white/70 text-center md:text-right">
             Copyright © MINERVA. All Rights Reserved.
           </p>
         </div>
