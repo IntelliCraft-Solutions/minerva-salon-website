@@ -6,6 +6,7 @@ import { motion } from "framer-motion"
 import Navigation from "@/components/Navigation"
 import Footer from "@/components/Footer"
 import { Button } from "@/components/ui/button"
+import Link from "next/link"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
 import { Scissors, Palette, Sparkles, Star, Clock, DollarSign } from "lucide-react"
@@ -342,15 +343,19 @@ export default function ServicesPage() {
                   Our expert stylists are ready to bring your vision to life.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4">
-                  <Button className="bg-white text-primary hover:bg-white/90 rounded-full px-8 h-12 font-semibold">
-                    Book Appointment
-                  </Button>
-                  <Button 
-                    variant="outline" 
-                    className="border-2 border-white text-white hover:bg-white/10 rounded-full px-8 h-12 font-semibold"
-                  >
-                    Contact Us
-                  </Button>
+                  <Link href="/booking">
+                    <Button className="bg-white text-primary hover:bg-white/90 rounded-full px-8 h-12 font-semibold">
+                      Book Appointment
+                    </Button>
+                  </Link>
+                  <Link href="/contact">
+                    <Button 
+                      variant="outline" 
+                      className="border-2 border-white text-white hover:bg-white/10 rounded-full px-8 h-12 font-semibold"
+                    >
+                      Contact Us
+                    </Button>
+                  </Link>
                 </div>
               </div>
               

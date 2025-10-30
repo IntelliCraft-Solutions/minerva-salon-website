@@ -3,6 +3,15 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+/* Allogist Regular font */
+@font-face {
+  font-family: "Allogist";
+  src: url('/fonts/Allogist-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
@@ -54,6 +63,11 @@
 
 :root {
   --radius: 1.25rem;
+  
+  /* Hero layout variables */
+  --hero-left: 80px;
+  --nav-gap: 28px;
+  --avatar-overlap: -18px;
   
   /* Base colors - Warm palette */
   --background: #FAF7F2;
@@ -132,9 +146,16 @@
   * {
     @apply border-border outline-ring/50;
   }
+  html {
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
   body {
     @apply bg-background text-foreground;
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    overflow-y: auto;
+    overflow-x: hidden;
+    min-height: 100vh;
   }
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Playfair Display', serif;
@@ -144,9 +165,237 @@
 
 /* Wordmark for MINERVA brand in navbar */
 .brand-wordmark {
-  font-family: 'Cinzel', 'Playfair Display', serif;
-  letter-spacing: 0.25em;
+  font-family: 'Allogist', 'Cinzel', 'Playfair Display', serif;
+  letter-spacing: 0.125em;
+  font-weight: 400;
+  font-size: 36px;
+}
+
+/* Hero Section Styles */
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: flex-start;
+  overflow: hidden;
+  padding-top: 0;
+}
+
+.hero__content {
+  max-width: 560px;
+  padding: 0;
+}
+
+
+.hero__heading {
+  font-size: 56px;
+  line-height: 1.15;
   font-weight: 700;
+  margin-bottom: 1.5rem;
+}
+
+.hero__subheading {
+  max-width: 520px;
+  font-size: 18px;
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1.6;
+  margin-top: 0;
+}
+
+.hero-cta {
+  transform: translateY(0);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.hero-cta:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+/* Cards */
+.hero-card {
+  border-radius: 18px;
+  padding: 18px;
+  background: #fff;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  min-width: 200px;
+  max-width: 220px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hero-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+}
+
+.hero-card-image {
+  border-radius: 12px;
+  object-fit: cover;
+}
+
+.hero-card-cta {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #222;
+  color: #fff;
+  transition: transform 0.18s ease;
+}
+
+.hero-card-cta:hover {
+  transform: scale(1.05);
+}
+
+/* Happy Clients Avatars */
+.happy-clients {
+  position: absolute;
+  right: 48px;
+  bottom: 40px;
+  z-index: 40;
+}
+
+.avatar-list {
+  display: flex;
+  align-items: center;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+  overflow: hidden;
+  margin-left: var(--avatar-overlap);
+  transition: transform 0.18s ease, margin-left 0.18s ease;
+  position: relative;
+}
+
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.avatar:hover {
+  transform: translateY(-6px) scale(1.05);
+  z-index: 60;
+  margin-left: -8px;
+}
+
+.avatar.more {
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  color: #222;
+  border: 6px solid rgba(255, 255, 255, 0.9);
+}
+
+.tooltip {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.9);
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.avatar:hover .tooltip,
+.avatar:focus .tooltip {
+  opacity: 1;
+}
+
+/* Image Vignette */
+.hero__image-wrapper::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center right, rgba(0, 0, 0, 0.08), transparent 35%);
+  pointer-events: none;
+}
+
+/* Responsive Styles */
+@media (min-width: 1200px) {
+  .hero__heading {
+    font-size: 64px;
+  }
+  
+  :root {
+    --nav-gap: 32px;
+  }
+}
+
+@media (max-width: 1199px) and (min-width: 768px) {
+  .hero__heading {
+    font-size: 42px;
+  }
+  
+  .hero {
+    min-height: 100vh;
+  }
+  
+  :root {
+    --nav-gap: 16px;
+  }
+}
+
+@media (max-width: 767px) {
+  .hero {
+    min-height: auto;
+    flex-direction: column;
+  }
+  
+  .hero__heading {
+    font-size: 36px;
+    margin-bottom: 1rem;
+    line-height: 1.1;
+  }
+  
+  .hero__subheading {
+    font-size: 15px;
+    line-height: 1.5;
+  }
+  
+  .hero-card {
+    padding: 16px;
+    min-width: auto;
+  }
+  
+  .happy-clients {
+    right: 24px;
+    bottom: 24px;
+  }
+  
+  .avatar:not(:first-child) {
+    display: none;
+  }
+  
+  .avatar.more {
+    display: flex;
+  }
+  
+  :root {
+    --nav-gap: 16px;
+  }
+}
+
+@media (max-width: 600px) {
+  .happy-clients {
+    transform: scale(0.95);
+  }
 }
 
 /* Hide Next.js error overlay portal */

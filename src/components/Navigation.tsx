@@ -20,7 +20,7 @@ export default function Navigation() {
     { name: "Home", href: "/" },
     { name: "About Us", href: "/about" },
     { name: "Services", href: "/services" },
-    { name: "Booking", href: "#booking" },
+    { name: "Booking", href: "/booking" },
   ]
 
   return (
@@ -28,14 +28,15 @@ export default function Navigation() {
       scrolled ? "bg-[#6B5344]/95 backdrop-blur-sm border-b border-white/20" : "bg-transparent border-b border-transparent"
     }`}>
       <div className="container mx-auto px-4 lg:px-8">
-        <div className="relative flex items-center justify-between h-16 lg:h-20">
+        <div className="relative flex items-center justify-between h-16 lg:h-20" style={{ padding: '24px 0' }}>
           {/* Left: Desktop Navigation */}
-          <div className="hidden lg:flex items-center gap-8">
+          <div className="hidden lg:flex items-center" style={{ gap: '48px', paddingLeft: '0' }}>
             {navLinks.map((link) => (
               <Link
                 key={link.name}
                 href={link.href}
-                className="text-white/90 hover:text-white transition-colors text-sm font-medium"
+                className="text-white/90 hover:text-white transition-colors text-base font-medium"
+                style={{ letterSpacing: '0.02em' }}
               >
                 {link.name}
               </Link>
@@ -43,7 +44,7 @@ export default function Navigation() {
           </div>
 
           {/* Center: Brand */}
-          <Link href="/" className="absolute left-1/2 -translate-x-1/2 text-2xl lg:text-3xl brand-wordmark text-white tracking-[0.25em]">
+          <Link href="/" className="absolute left-1/2 -translate-x-1/2 brand-wordmark text-white">
             MINERVA
           </Link>
 
@@ -63,20 +64,20 @@ export default function Navigation() {
                   <Menu className="h-6 w-6" />
                 </Button>
               </SheetTrigger>
-              <SheetContent side="right" className="bg-[#6B5344] text-white border-l-0">
-                <div className="flex flex-col gap-6 mt-8">
+              <SheetContent side="right" className="bg-[#6B5344] text-white border-l-0 w-[280px] sm:w-[320px] z-[100] p-0">
+                <div className="flex flex-col gap-6 mt-12 px-6 py-8">
                   {navLinks.map((link) => (
                     <Link
                       key={link.name}
                       href={link.href}
-                      className="text-white/90 hover:text-white transition-colors text-lg font-medium"
+                      className="text-white hover:text-white/80 transition-colors text-xl font-medium"
                     >
                       {link.name}
                     </Link>
                   ))}
                   <Button 
                     variant="outline" 
-                    className="bg-white text-[#6B5344] hover:bg-white/90 border-white rounded-full mt-4"
+                    className="bg-white text-[#6B5344] hover:bg-white/90 border-white rounded-full mt-4 h-12 text-base font-semibold w-full"
                   >
                     Contact Us
                   </Button>

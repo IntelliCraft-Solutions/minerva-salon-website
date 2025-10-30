@@ -3,16 +3,23 @@
 import { Calendar } from "@/components/ui/calendar"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
+import { Textarea } from "@/components/ui/textarea"
+import { Label } from "@/components/ui/label"
 import { useState } from "react"
 import { motion } from "framer-motion"
+import Image from "next/image"
+import { User, Phone, Mail, MessageSquare, Loader2 } from "lucide-react"
+import { toast } from "sonner"
 
 export default function BookingCalendar() {
   const [date, setDate] = useState<Date | undefined>(new Date())
+  const [loading, setLoading] = useState(false)
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
     phone: "",
     email: "",
+    notes: "",
   })
 
   const workingHours = [
@@ -21,108 +28,250 @@ export default function BookingCalendar() {
     { day: "Sunday", hours: "Closed" },
   ]
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    console.log("Booking:", { date, ...formData })
+    
+    if (!date) {
+      toast.error('Please select a date')
+      return
+    }
+    
+    if (!formData.firstName || !formData.lastName || !formData.phone || !formData.email) {
+      toast.error('Please fill in all required fields')
+      return
+    }
+    
+    setLoading(true)
+    
+    try {
+      const dateStr = date.toISOString().split('T')[0]
+      
+      // Create appointment without specific time - will be confirmed by salon
+      const response = await fetch('/api/appointments', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          service: 'haircut', // Default service for hero form
+          date: dateStr,
+          time: '10:00', // Default time - will be confirmed
+          duration: 60,
+          customer: {
+            firstName: formData.firstName,
+            lastName: formData.lastName,
+            phone: formData.phone,
+            email: formData.email,
+          },
+          notes: formData.notes || 'Requested via homepage - please call to confirm service and time',
+          source: 'hero',
+        }),
+      })
+      
+      const data = await response.json()
+      
+      if (response.ok) {
+        toast.success('Request submitted! We\'ll call you to confirm your appointment.')
+        // Reset form
+        setFormData({
+          firstName: "",
+          lastName: "",
+          phone: "",
+          email: "",
+          notes: "",
+        })
+        setDate(new Date())
+      } else {
+        toast.error(data.error || 'Failed to submit request. Please try again.')
+      }
+    } catch (error) {
+      console.error('Booking error:', error)
+      toast.error('Failed to submit request. Please try again.')
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
-    <div className="grid lg:grid-cols-2 gap-8">
+    <div className="grid lg:grid-cols-2 gap-6 lg:gap-8">
       {/* Calendar Section */}
       <motion.div
         initial={{ opacity: 0, x: -30 }}
         whileInView={{ opacity: 1, x: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.6 }}
-        className="bg-white rounded-3xl p-6 shadow-lg"
+        className="space-y-6"
       >
-        <h3 className="text-xl font-bold mb-4">January 2024</h3>
-        <Calendar
-          mode="single"
-          selected={date}
-          onSelect={setDate}
-          className="rounded-2xl border-0"
-          classNames={{
-            months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
-            month: "space-y-4",
-            caption: "flex justify-center pt-1 relative items-center",
-            caption_label: "text-lg font-semibold",
-            nav: "space-x-1 flex items-center",
-            nav_button: "h-9 w-9 bg-transparent p-0 opacity-50 hover:opacity-100 rounded-full hover:bg-muted",
-            nav_button_previous: "absolute left-1",
-            nav_button_next: "absolute right-1",
-            table: "w-full border-collapse space-y-1",
-            head_row: "flex",
-            head_cell: "text-muted-foreground rounded-md w-full font-normal text-sm",
-            row: "flex w-full mt-2",
-            cell: "relative p-0 text-center text-sm focus-within:relative focus-within:z-20 [&:has([aria-selected])]:bg-accent",
-            day: "h-12 w-full p-0 font-normal hover:bg-muted rounded-full transition-colors",
-            day_selected: "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground rounded-full",
-            day_today: "bg-accent text-accent-foreground rounded-full",
-            day_outside: "text-muted-foreground opacity-50",
-            day_disabled: "text-muted-foreground opacity-50",
-            day_range_middle: "aria-selected:bg-accent aria-selected:text-accent-foreground",
-            day_hidden: "invisible",
-          }}
-        />
+        <h3 className="text-2xl lg:text-3xl font-bold text-center">Choose from calendar</h3>
         
-        <div className="mt-6 space-y-3">
-          <h4 className="font-bold text-lg">Working Hours</h4>
-          {workingHours.map((item, index) => (
-            <div key={index} className="flex justify-between text-sm">
-              <span className="text-muted-foreground">{item.day}</span>
-              <span className="font-medium">{item.hours}</span>
+        {/* Calendar Card with Stylist Image */}
+        <div className="bg-[#E8DDD0] rounded-3xl p-4 lg:p-6 shadow-sm">
+          <div className="bg-white rounded-2xl p-4 lg:p-6 flex flex-col md:flex-row gap-4">
+            {/* Stylist Image - Left Column */}
+            <div className="relative w-full md:w-[200px] lg:w-[220px] h-[280px] md:h-auto md:min-h-[320px] rounded-2xl overflow-hidden flex-shrink-0">
+              <Image
+                src="/stylist.png"
+                alt="Professional Stylist"
+                fill
+                className="object-cover object-center"
+                priority
+              />
             </div>
-          ))}
+            
+            {/* Calendar - Right Column */}
+            <div className="flex-1 flex items-center justify-center">
+              <Calendar
+                mode="single"
+                selected={date}
+                onSelect={setDate}
+                className="border-0 w-full mx-auto"
+                classNames={{
+                  months: "flex flex-col space-y-4 w-full",
+                  month: "space-y-4 w-full px-10 lg:px-12",
+                  caption: "flex justify-center pt-1 relative items-center mb-4",
+                  caption_label: "text-lg font-bold",
+                  nav: "flex items-center",
+                  nav_button: "h-8 w-8 bg-transparent p-0 hover:bg-gray-100 rounded-full transition-colors flex items-center justify-center",
+                  nav_button_previous: "absolute left-0 top-0",
+                  nav_button_next: "absolute right-0 top-0",
+                  table: "w-full border-collapse mx-auto",
+                  head_row: "flex w-full mb-2",
+                  head_cell: "text-foreground/60 rounded-md font-medium text-xs flex-1 text-center",
+                  row: "flex w-full mt-1",
+                  cell: "relative p-0.5 text-center text-sm focus-within:relative focus-within:z-20 flex-1 flex items-center justify-center",
+                  day: "h-9 w-9 p-0 font-normal hover:bg-gray-50 rounded-lg transition-all text-sm flex items-center justify-center",
+                  day_selected: "bg-[#A94442] text-white hover:bg-[#A94442] hover:text-white focus:bg-[#A94442] focus:text-white rounded-lg font-semibold",
+                  day_today: "bg-gray-100 text-foreground rounded-lg font-medium",
+                  day_outside: "text-muted-foreground opacity-30",
+                  day_disabled: "text-muted-foreground opacity-20",
+                  day_range_middle: "aria-selected:bg-accent aria-selected:text-accent-foreground",
+                  day_hidden: "invisible",
+                }}
+              />
+            </div>
+          </div>
+        </div>
+        
+        {/* Working Hours */}
+        <div className="space-y-4">
+          <h4 className="text-xl font-bold">Working Hours</h4>
+          <div className="space-y-3">
+            {workingHours.map((item, index) => (
+              <div key={index} className="flex justify-between text-base py-2">
+                <span className="text-foreground/70">{item.day}</span>
+                <span className="font-semibold">{item.hours}</span>
+              </div>
+            ))}
+          </div>
         </div>
       </motion.div>
 
-      {/* Contact Form */}
+      {/* Your Details Form */}
       <motion.div
         initial={{ opacity: 0, x: 30 }}
         whileInView={{ opacity: 1, x: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.6 }}
-        className="bg-[#2A1810] rounded-3xl p-8 shadow-lg"
+        className="bg-[#2A1810] rounded-3xl p-6 lg:p-8 shadow-lg flex flex-col justify-center"
       >
-        <h3 className="text-2xl font-bold text-white mb-6">We will call you</h3>
+        <h3 className="text-2xl font-bold text-white mb-6">Your Details</h3>
         <form onSubmit={handleSubmit} className="space-y-4">
-          <Input
-            placeholder="First Name"
-            value={formData.firstName}
-            onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
-            className="bg-[#3A2A1F] border-[#5D4A3A] text-white placeholder:text-white/50 rounded-2xl h-12"
-            required
-          />
-          <Input
-            placeholder="Last Name"
-            value={formData.lastName}
-            onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
-            className="bg-[#3A2A1F] border-[#5D4A3A] text-white placeholder:text-white/50 rounded-2xl h-12"
-            required
-          />
-          <Input
-            placeholder="Phone"
-            type="tel"
-            value={formData.phone}
-            onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-            className="bg-[#3A2A1F] border-[#5D4A3A] text-white placeholder:text-white/50 rounded-2xl h-12"
-            required
-          />
-          <Input
-            placeholder="Email"
-            type="email"
-            value={formData.email}
-            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-            className="bg-[#3A2A1F] border-[#5D4A3A] text-white placeholder:text-white/50 rounded-2xl h-12"
-            required
-          />
+          <div>
+            <Label htmlFor="firstName" className="text-white/80 mb-2 flex items-center gap-2">
+              <User className="w-4 h-4" />
+              First Name *
+            </Label>
+            <Input
+              id="firstName"
+              placeholder="John"
+              value={formData.firstName}
+              onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
+              className="bg-[#3A2A1F] border-[#5D4A3A] text-white placeholder:text-white/50 rounded-xl h-12"
+              required
+            />
+          </div>
+          
+          <div>
+            <Label htmlFor="lastName" className="text-white/80 mb-2 flex items-center gap-2">
+              <User className="w-4 h-4" />
+              Last Name *
+            </Label>
+            <Input
+              id="lastName"
+              placeholder="Doe"
+              value={formData.lastName}
+              onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
+              className="bg-[#3A2A1F] border-[#5D4A3A] text-white placeholder:text-white/50 rounded-xl h-12"
+              required
+            />
+          </div>
+          
+          <div>
+            <Label htmlFor="phone" className="text-white/80 mb-2 flex items-center gap-2">
+              <Phone className="w-4 h-4" />
+              Phone *
+            </Label>
+            <Input
+              id="phone"
+              type="tel"
+              maxLength={13}
+              placeholder="+1 (555) 555-5555"
+              value={formData.phone}
+              onChange={(e) => {
+                const numeric = e.target.value.replace(/\D/g, '').slice(0, 13)
+                setFormData({ ...formData, phone: numeric })
+              }}
+              className="bg-[#3A2A1F] border-[#5D4A3A] text-white placeholder:text-white/50 rounded-xl h-12"
+              required
+            />
+          </div>
+          
+          <div>
+            <Label htmlFor="email" className="text-white/80 mb-2 flex items-center gap-2">
+              <Mail className="w-4 h-4" />
+              Email *
+            </Label>
+            <Input
+              id="email"
+              type="email"
+              placeholder="john@example.com"
+              value={formData.email}
+              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+              className="bg-[#3A2A1F] border-[#5D4A3A] text-white placeholder:text-white/50 rounded-xl h-12"
+              required
+            />
+          </div>
+          
+          <div>
+            <Label htmlFor="notes" className="text-white/80 mb-2 flex items-center gap-2">
+              <MessageSquare className="w-4 h-4" />
+              Notes (Optional)
+            </Label>
+            <Textarea
+              id="notes"
+              placeholder="Any special requests or preferences..."
+              value={formData.notes}
+              onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
+              className="bg-[#3A2A1F] border-[#5D4A3A] text-white placeholder:text-white/50 rounded-xl min-h-[100px] resize-none"
+            />
+          </div>
+          
           <Button
             type="submit"
-            className="w-full bg-white text-[#2A1810] hover:bg-white/90 rounded-full h-12 font-semibold text-base"
+            disabled={loading}
+            className="w-full bg-white text-[#2A1810] hover:bg-white/90 rounded-full h-14 font-semibold text-lg mt-6 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Book Appointment
+            {loading ? (
+              <>
+                <Loader2 className="w-5 h-5 animate-spin mr-2" />
+                Submitting...
+              </>
+            ) : (
+              'Book Appointment'
+            )}
           </Button>
+          
+          <p className="text-white/60 text-xs text-center mt-4">
+            We'll call you to confirm your appointment
+          </p>
         </form>
       </motion.div>
     </div>

@@ -12,6 +12,7 @@ import TeamCard from "@/components/TeamCard"
 import BookingCalendar from "@/components/BookingCalendar"
 import StatsCounter from "@/components/StatsCounter"
 import FeatureCard from "@/components/FeatureCard"
+import HappyClients from "@/components/HappyClients"
 import { Award, Users, Clock, Star, ArrowRight, ChevronLeft, ChevronRight } from "lucide-react"
 import { useState } from "react"
 
@@ -32,6 +33,14 @@ export default function Home() {
     { name: "Sophia Davis", role: "Nail Specialist", image: "https://images.unsplash.com/photo-1587614382346-4ec70e388b28?w=400&q=80" },
   ]
 
+  const happyClients = [
+    { name: "Sara L.", image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&q=80" },
+    { name: "Maya R.", image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&q=80" },
+    { name: "Anna P.", image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100&q=80" },
+    { name: "Emma K.", image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80" },
+    { name: "Sophie D.", image: "https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=100&q=80" },
+  ]
+
   const visibleTeam = team.slice(currentTeamIndex, currentTeamIndex + 3)
 
   return (
@@ -39,53 +48,53 @@ export default function Home() {
       <Navigation />
 
       {/* Hero Section */}
-      <section
-        className="relative min-h-screen overflow-hidden bg-[#6B5344]"
-        style={{
-          backgroundImage: "url(/herobg2.jpg)",
-          backgroundSize: "auto 108vh",
-          backgroundRepeat: "no-repeat",
-          backgroundPosition: "right bottom",
-          backgroundColor: "#6B5344"
-        }}
-      >
+      <section className="hero bg-[#6B5344] relative overflow-hidden" style={{
+        backgroundImage: "url(/hero3.png)",
+        backgroundSize: "cover",
+        backgroundRepeat: "no-repeat",
+        backgroundPosition: "right top"
+      }}>
         {/* Left gradient overlay to enhance text contrast */}
-        <div className="pointer-events-none absolute inset-y-0 left-0 w-2/3 bg-gradient-to-r from-[#6B5344] via-[#6B5344]/80 to-transparent" />
-        <div className="container mx-auto px-4 lg:px-8 pt-24 lg:pt-32 pb-16">
-          <div className="grid grid-cols-1 gap-8 lg:gap-12 items-center">
+        <div className="pointer-events-none absolute inset-y-0 left-0 w-2/3 bg-gradient-to-r from-[#6B5344] via-[#6B5344]/90 to-transparent z-0" />
+
+        <div className="container mx-auto px-4 lg:px-8 relative z-10 pt-20 pb-8 lg:pt-24 lg:pb-0">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8">
             {/* Left Content */}
             <motion.div
               initial={{ opacity: 0, x: -50 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8 }}
-              className="space-y-6 lg:space-y-8 z-10"
+              className="z-10 lg:col-span-5 pb-8 lg:pb-12 flex flex-col justify-between min-h-[auto] lg:min-h-[calc(100vh-12rem)] lg:pl-8"
             >
-              <h1 className="text-4xl lg:text-6xl xl:text-7xl font-bold text-white leading-tight">
-                Get Hair Style<br />You Deserve
-              </h1>
-              <p className="text-white/90 text-base lg:text-lg max-w-lg leading-relaxed">
-                Discover a world of sophistication and personalized beauty at MINERVA. Our team's more than a place for haircuts. 
-                It's a haven where your unique sense of style meets expert care.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Button className="bg-primary hover:bg-primary/90 text-white rounded-full px-8 h-12 text-base font-semibold shadow-lg">
-                  Book Appointment
-                </Button>
+              <div>
+                <h1 className="hero__heading text-white leading-tight" style={{ wordSpacing: '0.15em' }}>
+                  Get Hair Style<br />You Deserve
+                </h1>
+                <p className="hero__subheading mb-6">
+                  Discover a world of sophistication and personalized beauty at MINERVA. Our salon is more than just a place for haircuts; it's a haven where your unique style takes center stage.
+                </p>
+                <div className="flex flex-col sm:flex-row gap-4 mb-6">
+                  <Link href="/booking">
+                    <Button className="hero-cta bg-primary hover:bg-primary/90 text-white rounded-full px-10 h-14 text-lg font-semibold shadow-lg">
+                      Book Appointment
+                    </Button>
+                  </Link>
+                </div>
               </div>
 
-              {/* New Arrivals Card */}
+              {/* Cards */}
               <motion.div
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.3 }}
-                className="grid grid-cols-2 gap-4 max-w-md mt-8"
+                className="grid grid-cols-2 gap-3 max-w-md mt-6 lg:mt-auto"
               >
-                <div className="bg-white rounded-2xl p-4 shadow-lg">
+                <div className="hero-card">
                   <div className="flex items-start justify-between mb-3">
                     <span className="text-sm font-semibold text-[#2A1810]">New Arrivals</span>
-                    <div className="w-6 h-6 rounded-full bg-[#2A1810] flex items-center justify-center">
-                      <ArrowRight className="w-3 h-3 text-white" />
-                    </div>
+                    <button className="hero-card-cta flex items-center justify-center">
+                      <ArrowRight className="w-3.5 h-3.5 text-white" />
+                    </button>
                   </div>
                   <div className="aspect-square bg-[#F5EFE7] rounded-xl overflow-hidden">
                     <Image
@@ -93,11 +102,11 @@ export default function Home() {
                       alt="Hair Dryer"
                       width={200}
                       height={200}
-                      className="w-full h-full object-cover"
+                      className="hero-card-image w-full h-full"
                     />
                   </div>
                 </div>
-                <div className="bg-[#E8DDD0] rounded-2xl p-4 shadow-lg flex flex-col justify-center items-center text-center">
+                <div className="hero-card bg-[#F4EDE7] flex flex-col justify-center items-center text-center">
                   <div className="w-16 h-16 rounded-full overflow-hidden mb-3">
                     <Image
                       src="https://images.unsplash.com/photo-1562322140-8baeececf3df?w=400&q=80"
@@ -114,10 +123,13 @@ export default function Home() {
             </motion.div>
           </div>
         </div>
+
+        {/* Happy Clients */}
+        <HappyClients clients={happyClients} />
       </section>
 
       {/* Our Services */}
-      <section id="services" className="py-16 lg:py-24 bg-background">
+      <section id="services" className="py-16 lg:py-24 bg-background -mt-1">
         <div className="container mx-auto px-4 lg:px-8">
           <div className="max-w-2xl mb-12">
             <motion.h2
