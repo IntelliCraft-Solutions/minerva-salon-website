@@ -79,37 +79,37 @@ export function ContactForm() {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.6 }}
-      className="bg-[#2A1810] rounded-3xl p-6 lg:p-10 shadow-xl text-white"
+      className="bg-[#2A1810] rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-10 shadow-xl text-white"
     >
-      <div className="mb-8">
-        <span className="inline-flex items-center px-4 py-1 rounded-full bg-white/10 text-sm uppercase tracking-widest text-white/80">
+      <div className="mb-6 sm:mb-8">
+        <span className="inline-flex items-center px-3 sm:px-4 py-1 rounded-full bg-white/10 text-xs sm:text-sm uppercase tracking-widest text-white/80">
           Drop Us a Line
         </span>
-        <h2 className="text-3xl lg:text-4xl font-bold mt-4">Send us a message</h2>
-        <p className="text-white/70 mt-3 text-base lg:text-lg">
+        <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold mt-3 sm:mt-4">Send us a message</h2>
+        <p className="text-white/70 mt-2 sm:mt-3 text-sm sm:text-base lg:text-lg">
           Tell us how we can help and our concierge will reply within 24 hours.
         </p>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-6">
+      <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 lg:gap-6">
           <div className="space-y-2">
-            <Label htmlFor="name" className="flex items-center gap-2 text-white/80">
-              <User className="h-4 w-4" /> Full Name *
+            <Label htmlFor="name" className="flex items-center gap-2 text-white/80 text-sm">
+              <User className="h-3.5 w-3.5 sm:h-4 sm:w-4" /> Full Name *
             </Label>
             <Input
               id="name"
               placeholder="Jane Doe"
               value={formData.name}
               onChange={(event) => setFormData({ ...formData, name: event.target.value })}
-              className="bg-[#3A2A1F] border-[#5D4A3A] text-white placeholder:text-white/50 rounded-xl h-12"
+              className="bg-[#3A2A1F] border-[#5D4A3A] text-white placeholder:text-white/50 rounded-xl h-11 sm:h-12 text-sm sm:text-base"
               required
             />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="email" className="flex items-center gap-2 text-white/80">
-              <Mail className="h-4 w-4" /> Email Address *
+            <Label htmlFor="email" className="flex items-center gap-2 text-white/80 text-sm">
+              <Mail className="h-3.5 w-3.5 sm:h-4 sm:w-4" /> Email Address *
             </Label>
             <Input
               id="email"
@@ -117,16 +117,16 @@ export function ContactForm() {
               placeholder="you@example.com"
               value={formData.email}
               onChange={(event) => setFormData({ ...formData, email: event.target.value })}
-              className="bg-[#3A2A1F] border-[#5D4A3A] text-white placeholder:text-white/50 rounded-xl h-12"
+              className="bg-[#3A2A1F] border-[#5D4A3A] text-white placeholder:text-white/50 rounded-xl h-11 sm:h-12 text-sm sm:text-base"
               required
             />
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 lg:gap-6">
           <div className="space-y-2">
-            <Label htmlFor="phone" className="flex items-center gap-2 text-white/80">
-              <Phone className="h-4 w-4" /> Phone Number *
+            <Label htmlFor="phone" className="flex items-center gap-2 text-white/80 text-sm">
+              <Phone className="h-3.5 w-3.5 sm:h-4 sm:w-4" /> Phone Number *
             </Label>
             <Input
               id="phone"
@@ -138,25 +138,25 @@ export function ContactForm() {
                 const numeric = event.target.value.replace(/\D/g, "").slice(0, 13)
                 setFormData({ ...formData, phone: numeric })
               }}
-              className="bg-[#3A2A1F] border-[#5D4A3A] text-white placeholder:text-white/50 rounded-xl h-12"
+              className="bg-[#3A2A1F] border-[#5D4A3A] text-white placeholder:text-white/50 rounded-xl h-11 sm:h-12 text-sm sm:text-base"
               required
             />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="category" className="flex items-center gap-2 text-white/80">
-              <Tags className="h-4 w-4" /> Inquiry Category *
+            <Label htmlFor="category" className="flex items-center gap-2 text-white/80 text-sm">
+              <Tags className="h-3.5 w-3.5 sm:h-4 sm:w-4" /> Inquiry Category *
             </Label>
             <Select
               value={formData.category}
               onValueChange={(value) => setFormData({ ...formData, category: value })}
             >
-              <SelectTrigger className="bg-[#3A2A1F] border-[#5D4A3A] text-white rounded-xl h-12">
+              <SelectTrigger className="bg-[#3A2A1F] border-[#5D4A3A] text-white rounded-xl h-11 sm:h-12 text-sm sm:text-base">
                 <SelectValue placeholder="Select an option" />
               </SelectTrigger>
               <SelectContent className="bg-[#3A2A1F] text-white border-[#5D4A3A]">
                 {inquiryCategories.map((category) => (
-                  <SelectItem key={category.value} value={category.value}>
+                  <SelectItem key={category.value} value={category.value} className="text-sm sm:text-base">
                     {category.label}
                   </SelectItem>
                 ))}
@@ -166,15 +166,15 @@ export function ContactForm() {
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="message" className="flex items-center gap-2 text-white/80">
-            <MessageSquare className="h-4 w-4" /> Message *
+          <Label htmlFor="message" className="flex items-center gap-2 text-white/80 text-sm">
+            <MessageSquare className="h-3.5 w-3.5 sm:h-4 sm:w-4" /> Message *
           </Label>
           <Textarea
             id="message"
             placeholder="Share a few details..."
             value={formData.message}
             onChange={(event) => setFormData({ ...formData, message: event.target.value })}
-            className="bg-[#3A2A1F] border-[#5D4A3A] text-white placeholder:text-white/50 rounded-2xl min-h-[160px] resize-none"
+            className="bg-[#3A2A1F] border-[#5D4A3A] text-white placeholder:text-white/50 rounded-xl sm:rounded-2xl min-h-[120px] sm:min-h-[160px] resize-none text-sm sm:text-base"
             required
           />
         </div>
@@ -182,11 +182,11 @@ export function ContactForm() {
         <Button
           type="submit"
           disabled={loading}
-          className="w-full md:w-auto px-8 h-12 rounded-full bg-white text-[#2A1810] hover:bg-white/90 font-semibold text-lg flex items-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
+          className="w-full md:w-auto px-6 sm:px-8 h-11 sm:h-12 rounded-full bg-white text-[#2A1810] hover:bg-white/90 font-semibold text-base sm:text-lg flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
         >
           {loading ? (
             <>
-              <Loader2 className="h-5 w-5 animate-spin" />
+              <Loader2 className="h-4 w-4 sm:h-5 sm:w-5 animate-spin" />
               Sending...
             </>
           ) : (
